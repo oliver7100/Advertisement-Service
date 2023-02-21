@@ -40,14 +40,14 @@ func (s *service) CreateAdvertisement(ctx context.Context, req *Advertisement) (
 }
 
 func (s *service) GetAdvertisements(ctx context.Context, req *GetAllAdvertisementsRequest) (*GetAllAdvertisementsResponse, error) {
-	arr := new([]*Advertisement)
+	var items []*Advertisement
 
-	if tx := s.Conn.Instance.Model(&database.Advertisement{}).Find(arr, "activated = ?", req.AllowDisabled); tx.Error != nil {
+	if tx := s.Conn.Instance.Table("advertisements").Find(&items, "activated = ?", 0); tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	return &GetAllAdvertisementsResponse{
-		Items: *arr,
+		Items: items,
 	}, nil
 }
 
