@@ -16,7 +16,7 @@ func main() {
 	}
 
 	d, err := database.NewDatabaseConnection(
-		"root:root@tcp(127.0.0.1:3306)/db_user_service?charset=utf8mb4&parseTime=True&loc=Local",
+		"root:root@tcp(127.0.0.1:3306)/db_advertisement_service?charset=utf8mb4&parseTime=True&loc=Local",
 	)
 
 	if err != nil {

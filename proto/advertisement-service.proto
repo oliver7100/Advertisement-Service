@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./proto";
+
+message Advertisement {
+    string image = 1; 
+    string email = 2;
+    string description = 3;
+    bool activated = 4;
+}
+
+message GetAllAdvertisementsResponse {
+    repeated Advertisement items = 1;
+}
+
+message GetAllAdvertisementsRequest {
+    bool allowDisabled = 1; 
+}
+
+service AdvertisementService {
+    rpc CreateAdvertisement(Advertisement) returns (Advertisement) {};
+    rpc GetAdvertisements(GetAllAdvertisementsRequest) returns (GetAllAdvertisementsResponse) {};
+}

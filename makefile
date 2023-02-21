@@ -1,6 +1,6 @@
 .PHONY: proto
 proto:
-	protoc --go_out=./ --go-grpc_out=./ ./proto/service.proto
+	protoc --go_out=./ --go-grpc_out=./ ./proto/advertisement-service.proto
 
 .PHONY: local
 
