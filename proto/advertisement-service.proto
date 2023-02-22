@@ -19,7 +19,12 @@ message GetAllAdvertisementsRequest {
     bool allowDisabled = 1; 
 }
 
+message DisableAdvertisementRequest {
+    int32 id = 1;
+}
+
 service AdvertisementService {
     rpc CreateAdvertisement(Advertisement) returns (Advertisement) {};
     rpc GetAdvertisements(GetAllAdvertisementsRequest) returns (GetAllAdvertisementsResponse) {};
+    rpc DisableAdvertisement(DisableAdvertisementRequest) returns (Advertisement) {};
 }

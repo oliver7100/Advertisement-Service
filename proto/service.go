@@ -39,6 +39,23 @@ func (s *service) CreateAdvertisement(ctx context.Context, req *Advertisement) (
 	return req, nil
 }
 
+func (s *service) DisableAdvertisement(ctx context.Context, req *DisableAdvertisementRequest) (*Advertisement, error) {
+	var o database.Advertisement
+	if tx := s.Conn.Instance.Model(&database.Advertisement{ID: int(req.Id)}).First(&o); tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	o.Activated = false
+
+	if tx := s.Conn.Instance.Save(o); tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	return &Advertisement{
+		Activated: o.Activated,
+	}, nil
+}
+
 func (s *service) GetAdvertisements(ctx context.Context, req *GetAllAdvertisementsRequest) (*GetAllAdvertisementsResponse, error) {
 	var items []*Advertisement
 

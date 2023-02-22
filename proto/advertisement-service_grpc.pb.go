@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type AdvertisementServiceClient interface {
 	CreateAdvertisement(ctx context.Context, in *Advertisement, opts ...grpc.CallOption) (*Advertisement, error)
 	GetAdvertisements(ctx context.Context, in *GetAllAdvertisementsRequest, opts ...grpc.CallOption) (*GetAllAdvertisementsResponse, error)
+	DisableAdvertisement(ctx context.Context, in *DisableAdvertisementRequest, opts ...grpc.CallOption) (*Advertisement, error)
 }
 
 type advertisementServiceClient struct {
@@ -52,12 +53,22 @@ func (c *advertisementServiceClient) GetAdvertisements(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *advertisementServiceClient) DisableAdvertisement(ctx context.Context, in *DisableAdvertisementRequest, opts ...grpc.CallOption) (*Advertisement, error) {
+	out := new(Advertisement)
+	err := c.cc.Invoke(ctx, "/proto.AdvertisementService/DisableAdvertisement", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdvertisementServiceServer is the server API for AdvertisementService service.
 // All implementations must embed UnimplementedAdvertisementServiceServer
 // for forward compatibility
 type AdvertisementServiceServer interface {
 	CreateAdvertisement(context.Context, *Advertisement) (*Advertisement, error)
 	GetAdvertisements(context.Context, *GetAllAdvertisementsRequest) (*GetAllAdvertisementsResponse, error)
+	DisableAdvertisement(context.Context, *DisableAdvertisementRequest) (*Advertisement, error)
 	mustEmbedUnimplementedAdvertisementServiceServer()
 }
 
@@ -70,6 +81,9 @@ func (UnimplementedAdvertisementServiceServer) CreateAdvertisement(context.Conte
 }
 func (UnimplementedAdvertisementServiceServer) GetAdvertisements(context.Context, *GetAllAdvertisementsRequest) (*GetAllAdvertisementsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAdvertisements not implemented")
+}
+func (UnimplementedAdvertisementServiceServer) DisableAdvertisement(context.Context, *DisableAdvertisementRequest) (*Advertisement, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DisableAdvertisement not implemented")
 }
 func (UnimplementedAdvertisementServiceServer) mustEmbedUnimplementedAdvertisementServiceServer() {}
 
@@ -120,6 +134,24 @@ func _AdvertisementService_GetAdvertisements_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdvertisementService_DisableAdvertisement_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DisableAdvertisementRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdvertisementServiceServer).DisableAdvertisement(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.AdvertisementService/DisableAdvertisement",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdvertisementServiceServer).DisableAdvertisement(ctx, req.(*DisableAdvertisementRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AdvertisementService_ServiceDesc is the grpc.ServiceDesc for AdvertisementService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +166,10 @@ var AdvertisementService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAdvertisements",
 			Handler:    _AdvertisementService_GetAdvertisements_Handler,
+		},
+		{
+			MethodName: "DisableAdvertisement",
+			Handler:    _AdvertisementService_DisableAdvertisement_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
