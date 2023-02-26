@@ -9,14 +9,14 @@ import (
 )
 
 func main() {
-	listener, err := net.Listen("tcp", ":7000")
+	listener, err := net.Listen("tcp", ":1338")
 
 	if err != nil {
 		panic(err)
 	}
 
 	d, err := database.NewDatabaseConnection(
-		"root:root@tcp(127.0.0.1:3306)/db_advertisement_service?charset=utf8mb4&parseTime=True&loc=Local",
+		"services:AVNS_zWWallm_soPdGTwcPQJ@tcp(db-mysql-fmf-do-user-7517862-0.b.db.ondigitalocean.com:25060)/db_advertisement_service",
 	)
 
 	if err != nil {
